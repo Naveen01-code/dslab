@@ -1,0 +1,218 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+        int data;
+        struct node* link;
+};
+struct node *head=NULL;
+void in_beg(int data)
+{
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        newnode->data=data;
+        newnode->link=NULL;
+        if(head==NULL)
+        {
+                head=newnode;
+        }
+        else
+        {
+                newnode->link=head;
+                head=newnode;
+        }
+        printf("%d inserted at the beginning.\n",newnode->data);
+}
+void in_end(int data)
+{
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        struct node *temp=head;
+        newnode->data=data;
+        newnode->link=NULL;
+        if(head==NULL)
+        {
+                head=newnode;
+        }
+       else
+        {
+                while(temp->link!=NULL)
+                {
+                        temp=temp->link;
+                }
+                temp->link=newnode;
+        }
+        printf("%d inserted at the end.\n",newnode->data);
+
+}
+int size_of_list()
+{
+        struct node* temp = head;
+        int count = 0;
+ 
+        while(temp != NULL)
+        {
+            count ++;
+            temp = temp->link;
+        }
+        return count;
+}
+void in_pos(int pos,int data)
+{
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        struct node *temp=head;
+        newnode->data=data;
+        newnode->link=NULL;
+        int count=0;
+        count=size_of_list();
+       
+        if(head==NULL&&(pos<=0||pos>1))
+        {
+            printf("\nInvalid position to insert a node\n");
+            return;
+        }
+        if(head!=NULL&&(pos<=0||pos>count))
+        {
+            printf("\nInvalid position to insert a node\n");
+            return;
+        }
+        if(pos==1)
+        {
+                in_beg(data);
+        }
+        else
+        {
+                while(pos!=2)
+                {
+                        temp=temp->link;
+                        pos--;
+                }
+        newnode->link=temp->link;
+        temp->link=newnode;
+        }
+        printf("%d inserted.\n",newnode->data);
+}
+void del_beg()
+{
+       
+        if(head==NULL)
+        {
+                printf("List is already empty.\n");
+                return;
+        }
+                struct node *temp=head;
+                head=head->link;
+                printf("Deleted %d from the beginning.\n", temp->data);
+                free(temp);
+                temp=NULL;
+}
+void del_end()
+{
+    struct node *temp = head;
+    struct node *temp2 = NULL;
+
+    if (head == NULL)
+    {
+        printf("List is already empty.\n");
+        return;
+    }
+    if (head->link == NULL)
+    {
+        free(head);
+        head = NULL;
+        printf("List is now empty.\n");
+        return;
+    }
+    while (temp->link != NULL)
+    {
+        temp2 = temp;
+        temp = temp->link;
+    }
+   
+    temp2->link = NULL;
+    printf("Deleted %d from the end.\n", temp->data);
+    free(temp);
+    temp=NULL;
+}
+void del_pos(int pos)
+{
+    int count = 0;
+    count=size_of_list();
+    struct node *prev,*curr=head;
+    if(pos<=0||pos>count)
+    {
+        printf("\nInvalid position to delete a node\n");
+        return;
+    }
+    if(pos==1)
+    {
+        del_beg();
+    }
+    else
+    {
+        while(pos!=1)
+        {
+            prev=curr;
+            curr=curr->link;
+            pos--;
+        }
+        prev->link=curr->link;
+        free(curr);
+        curr=NULL;
+        printf("Node deleted.\n");
+    }
+}
+void display()
+{
+        struct node *ptr=head;
+        if(head==NULL)
+        {
+                printf("List is empty\n");
+                return;
+        }
+        while(ptr!=NULL)
+        {
+                printf("%d \n",ptr->data);
+                ptr=ptr->link;
+        }
+}
+int main()
+{
+int choice,data,pos;
+while(1)
+{
+        printf("\n1.Insert at the beginning\n2.Insert at the end\n3.Insert at any position\n4.Display\n5.Delete from the beginning\n6.Delete from the end.\n7.Delete from any position\n8.Exit");
+        printf("\nEnter your choice:");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+                case 1: printf("Enter the data to be inserted at the beginning:\n");
+                        scanf("%d",&data);
+                        in_beg(data);
+                        break;
+                case 2: printf("Enter the data to be inserted at the end:\n");
+                        scanf("%d",&data);
+                        in_end(data);
+                        break;
+                case 3: printf("Enter the data to be inserted :\n");
+                        scanf("%d",&data);
+                        printf("Enter the position to be inserted :\n");
+                        scanf("%d",&pos);
+                        in_pos(pos,data);
+                        break;
+                case 4: display();
+                        break;
+                case 5: del_beg();
+                        break;
+                case 6: del_end();
+                        break;
+                case 7: printf("Enter the position to be deleted:\n");
+                        scanf("%d",&pos);
+                        del_pos(pos);
+                        break;
+                case 8: exit(0);
+                        break;
+                default:printf("\nWrong Input!");
+        }
+}
+return 0;
+}
+
